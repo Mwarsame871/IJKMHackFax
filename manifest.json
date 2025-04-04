@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Dog Whistle Detector",
+  "version": "1.0",
+  "description": "Detects racially coded language (dog whistles) on web pages.",
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}

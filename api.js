@@ -16,7 +16,7 @@ async function getDogWhistlesFromText(text) {
                 messages: [
                     {
                         role: 'system',
-                        content: 'You are an expert in identifying coded or racist dog whistle language. From the given text, return a list of any dog whistle phrases, each with the phrase, severity (1 to 3), and a brief explanation of why it\'s considered a dog whistle.'
+                        content: 'You are an expert in identifying coded or racist dog whistle language. From the given text, return a list of any dog whistle phrases, each with the phrase, severity (1 to 3), and a brief explanation of why it\'s considered a dog whistle. Return the response in this exact format: [{"phrase": "example phrase", "severity": 2, "reason": "explanation"}]'
                     },
                     {
                         role: 'user',
@@ -51,5 +51,5 @@ async function getDogWhistlesFromText(text) {
     }
 }
 
-// Export the function for use in other files
-export { getDogWhistlesFromText }; 
+// Make function globally available
+window.getDogWhistlesFromText = getDogWhistlesFromText; 

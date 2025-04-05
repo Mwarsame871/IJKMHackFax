@@ -23,8 +23,14 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["parser.js", "api.js", "content.js"],
+      "js": ["secrets.js", "parser.js", "api.js", "content.js"],
       "run_at": "document_end"
     }
-  ]
+  ],
+  "web_accessible_resources": [
+  {
+    "resources": ["images/dogtalking.png", "images/magdog.png"],
+    "matches": ["<all_urls>"]
+  }
+]
 }

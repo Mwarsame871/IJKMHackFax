@@ -178,7 +178,7 @@ dogIcon.style.cssText = `
 const content = document.createElement('div');
 content.style.cssText = `
     padding: 12px;
-    background:rgb(39, 0, 147);
+     background-color: #6b4de6;
     color: black;
 `;
 

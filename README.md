@@ -25,7 +25,7 @@ It highlights flagged phrases with colors based on severity and explains why the
 
 ## 📸 Demo
 
-![Wissl Watch detecting dog whistle phrases on Reddit](screenshot.png)
+https://youtu.be/ZgGkyCWXJEY
 
 ---
 

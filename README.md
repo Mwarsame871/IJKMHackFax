@@ -88,6 +88,10 @@ The extension uses:
 3. Make your changes
 4. Submit a pull request
 
+## Debugging Notice
+
+1.If the extension doesn't work after a minute, make sure to refresh the page after turning the extension on!
+   
 ## Security Note
 
 Never share your API key or commit it to version control. The `secrets.js` file is ignored by git to prevent accidental exposure of API keys.

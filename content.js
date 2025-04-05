@@ -164,7 +164,7 @@ titleBar.style.cssText = `
     display: flex;
     align-items: center;
     gap: 8px;
-    background-color: #6b4de6;
+    background-color: #d7d0ea;
 `;
 
 // Create the dog icon
@@ -174,16 +174,23 @@ dogIcon.style.cssText = `
     font-size: 16px;
 `;
 
+//Create logo
+const logo = document.createElement("img");
+logo.src = chrome.runtime.getURL("images/dogtalking.png"); // Use the proper path
+logo.alt = "Wissil Watch Logo";
+logo.style.width = "16px"; // Adjust size
+logo.style.marginRight = "10px";
+
 // Create the content container
 const content = document.createElement('div');
 content.style.cssText = `
     padding: 12px;
-     background-color: #6b4de6;
+    background:rgba(215,208,234,255);
     color: black;
 `;
 
 // Assemble the tooltip
-titleBar.prepend(dogIcon);
+titleBar.prepend(logo);  
 tooltip.appendChild(titleBar);
 tooltip.appendChild(content);
 document.body.appendChild(tooltip);

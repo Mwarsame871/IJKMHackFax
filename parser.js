@@ -1,9 +1,9 @@
-
 /**
  * Used for standard web articles(not social media posts)
  * Grabs tags that are commonly found in webpage articles
  * */
-function parseVisibleText() {
+function parseArticleText() {
+    console.log("Running article parser...");
     const selectors = [
         'article',
         'section',
@@ -22,7 +22,7 @@ function parseVisibleText() {
     //stores all parsed text blocks that will be analyzed
     const content = [];
 
-    //gets all elements that contain the tags listed in selectors and adds them to content, it also gets rid of small text boxes that contain filler 
+    //gets all elements that contain the tags listed in selectors and adds them to content
     document.querySelectorAll(selectors.join(',')).forEach(el => {
         const text = el.innerText.trim();
         if (
@@ -36,12 +36,13 @@ function parseVisibleText() {
         }
     });
 
-    //console.log("📄 Parsed article content:", content);
+    console.log(`Article parser found ${content.length} text blocks`);
     return content;
 }
 
 //Social media post parser
-function extractSocialMediaText() {
+function parseSocialMediaText() {
+    console.log("Running social media parser...");
     const allText = [];
 
     // Facebook posts
@@ -59,7 +60,7 @@ function extractSocialMediaText() {
         allText.push(post.innerText.trim());
     });
 
-    //console.log("Parsed Social Media Posts:", allText);
+    console.log(`Social media parser found ${allText.length} posts`);
     return allText;
 }
 
@@ -67,12 +68,13 @@ function extractSocialMediaText() {
  * Twitter parser
  * */
 const seenTexts = new Set();
-function extractTwitterPosts() {
+function parseTwitterPosts() {
+    console.log("Running Twitter parser...");
     const posts = [];
 
-    // Select tweet containers (each "post" is an <article>)
+    // Select tweet containers
     document.querySelectorAll('article').forEach(article => {
-        // Inside each article, find elements with a language attribute (these usually hold tweet text)
+        // Inside each article, find elements with a language attribute
         const tweetParts = article.querySelectorAll('div[lang]');
 
         const fullText = Array.from(tweetParts)
@@ -84,40 +86,42 @@ function extractTwitterPosts() {
             posts.push(fullText);
         }
     });
-    /*
-    if (posts.length > 0) {
-        console.log("Parsed Twitter/X posts:", posts);
+
+    console.log(`Twitter parser found ${posts.length} tweets`);
+    return posts;
+}
+
+// Function to determine which parser to use based on the current site
+function determineParser() {
+    const hostname = window.location.hostname.toLowerCase();
+    console.log("Determining parser for:", hostname);
+
+    if (hostname.includes('twitter.com') || hostname.includes('x.com')) {
+        console.log("Using Twitter parser");
+        return parseTwitterPosts;
+    } else if (
+        hostname.includes('reddit.com') || 
+        hostname.includes('facebook.com')
+    ) {
+        console.log("Using social media parser");
+        return parseSocialMediaText;
+    } else {
+        console.log("Using article parser");
+        return parseArticleText;
     }
-        */
-
 }
 
-/**
-* Starts a mutation observer for Twitter that runs the parser
-*/
-function observePosts(parserFunction) {
-    parserFunction(); // Initial parse
-
-    const observer = new MutationObserver(() => {
-        setTimeout(parserFunction, 1000); // small delay to allow new tweets to finish loading
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
-
-   // console.log("observer running...");
-
-
-    window.Observer = () => {
-        observer.disconnect();
-       // console.log("observer stopped");
-    };
+// Attach the appropriate parser to window.parseVisibleText
+function initializeParser() {
+    try {
+        window.parseVisibleText = determineParser();
+        console.log("Parser initialized successfully");
+    } catch (error) {
+        console.error("Error initializing parser:", error);
+        // Fallback to article parser if something goes wrong
+        window.parseVisibleText = parseArticleText;
+    }
 }
-//calls the method
-if (location.hostname.includes('reddit') || location.hostname.includes('facebook')) {
-    extractSocialMediaText();
-    setTimeout(() => observePosts(extractSocialMediaText), 2000);
-} else if (location.hostname.includes('twitter') || location.hostname.includes('x')) {
-    setTimeout(() => observePosts(extractTwitterPosts), 2000);
-} else {
-    setTimeout(() => parseVisibleText(), 2000);
-}
+
+// Initialize parser when the script loads
+initializeParser();

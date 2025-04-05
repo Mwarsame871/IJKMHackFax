@@ -26,5 +26,11 @@
       "js": ["parser.js", "api.js", "content.js"],
       "run_at": "document_end"
     }
-  ]
+  ],
+  "web_accessible_resources": [
+  {
+    "resources": ["images/dogtalking.png", "images/magdog.png"],
+    "matches": ["<all_urls>"]
+  }
+]
 }

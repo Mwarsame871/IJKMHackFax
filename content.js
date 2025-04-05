@@ -68,7 +68,7 @@ chrome.storage.local.get('isEnabled', async (result) => {
 // Listen for toggle changes
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     console.log("[DWD] Received message:", message);
-    
+
     if (message.type === 'toggleChange') {
         // Check if we're in a restricted URL
         if (window.location.protocol === 'chrome:' || window.location.protocol === 'chrome-extension:') {
@@ -126,7 +126,7 @@ function removeHighlights() {
 
 // Function to get highlight color based on severity
 function getSeverityColor(severity) {
-    switch(severity) {
+    switch (severity) {
         case 1: return 'yellow';
         case 2: return 'orange';
         case 3: return 'red';
@@ -151,12 +151,10 @@ tooltip.style.cssText = `
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
     overflow: hidden;
-    color: black;
 `;
 
 // Create the title bar
 const titleBar = document.createElement('div');
-titleBar.textContent = 'Explanation';
 titleBar.style.cssText = `
     padding: 8px 12px;
     font-weight: 600;
@@ -164,33 +162,42 @@ titleBar.style.cssText = `
     display: flex;
     align-items: center;
     gap: 8px;
-    background-color: #d7d0ea;
+    background-color: #A60101;
 `;
+
+// Create the title text
+const titleText = document.createElement('span');
+titleText.textContent = 'Explanation';
+titleText.style.marginLeft = '8px';
 
 // Create the dog icon
-const dogIcon = document.createElement('span');
-dogIcon.textContent = '🐶';
+const dogIcon = document.createElement('img');
+dogIcon.src = chrome.runtime.getURL('images/dogtalking.png');
 dogIcon.style.cssText = `
-    font-size: 16px;
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
 `;
 
-//Create logo
-const logo = document.createElement("img");
-logo.src = chrome.runtime.getURL("images/dogtalking.png"); // Use the proper path
-logo.alt = "Wissil Watch Logo";
-logo.style.width = "16px"; // Adjust size
-logo.style.marginRight = "10px";
+// Add console logging for debugging
+dogIcon.onload = () => {
+    console.log('Dog icon loaded successfully');
+};
+dogIcon.onerror = (e) => {
+    console.error('Failed to load dog icon:', e);
+};
 
 // Create the content container
 const content = document.createElement('div');
 content.style.cssText = `
     padding: 12px;
-    background:rgba(215,208,234,255);
-    color: black;
+    background: #d7d0ea;
+    color: #000000;
 `;
 
 // Assemble the tooltip
-titleBar.prepend(logo);  
+titleBar.appendChild(dogIcon);
+titleBar.appendChild(titleText);
 tooltip.appendChild(titleBar);
 tooltip.appendChild(content);
 document.body.appendChild(tooltip);
@@ -199,7 +206,7 @@ document.body.appendChild(tooltip);
 function showTooltip(event, explanation, severity) {
     // Set the content
     content.textContent = explanation;
-    
+
     // Set color based on severity
     const colors = {
         1: '#FFA500', // Orange for yellow highlights
@@ -207,18 +214,18 @@ function showTooltip(event, explanation, severity) {
         3: '#A60101'  // Red
     };
     titleBar.style.backgroundColor = colors[severity] || colors[1];
-    
+
     // Show tooltip
     tooltip.style.display = 'block';
-    
+
     // Position tooltip near the mouse but ensure it stays within viewport
     const rect = tooltip.getBoundingClientRect();
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
-    
+
     let left = event.clientX + 10;
     let top = event.clientY + 10;
-    
+
     // Adjust if tooltip would go off-screen
     if (left + rect.width > viewportWidth) {
         left = viewportWidth - rect.width - 10;
@@ -226,10 +233,10 @@ function showTooltip(event, explanation, severity) {
     if (top + rect.height > viewportHeight) {
         top = viewportHeight - rect.height - 10;
     }
-    
+
     tooltip.style.left = `${left}px`;
     tooltip.style.top = `${top}px`;
-    
+
     // Trigger fade in
     requestAnimationFrame(() => {
         tooltip.style.opacity = '1';
@@ -251,7 +258,7 @@ function highlightPhrase(node, phrase, severity, reason) {
     try {
         const text = node.textContent;
         const regex = new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
-        
+
         if (text.match(regex)) {
             console.log("[DWD] Found match for phrase:", phrase);
             const span = document.createElement('span');
@@ -260,7 +267,7 @@ function highlightPhrase(node, phrase, severity, reason) {
                              data-reason="${reason}"
                              data-severity="${severity}">${match}</span>`;
             });
-            
+
             // Add event listeners to the new highlights
             span.querySelectorAll('.dog-whistle-highlight').forEach(highlight => {
                 highlight.addEventListener('mouseenter', (e) => {
@@ -269,7 +276,7 @@ function highlightPhrase(node, phrase, severity, reason) {
                 });
                 highlight.addEventListener('mouseleave', hideTooltip);
             });
-            
+
             node.parentNode.replaceChild(span, node);
             return true;
         }
@@ -292,7 +299,7 @@ async function processPage() {
         // Check cooldown for API call
         const now = Date.now();
         const timeSinceLastCall = now - lastApiCallTime;
-        
+
         if (timeSinceLastCall < API_COOLDOWN_MS) {
             console.log(`[DWD] Skipping API call - ${Math.ceil((API_COOLDOWN_MS - timeSinceLastCall) / 1000)}s cooldown remaining`);
             return;
@@ -307,10 +314,10 @@ async function processPage() {
         console.log("[DWD] Getting text blocks...");
         const textBlocks = window.parseVisibleText();
         console.log(`[DWD] Found ${textBlocks.length} text blocks`);
-        
+
         // Combine blocks into one string
         const fullText = textBlocks.join('\n\n');//problem
-        
+
         // Skip if no substantial text
         /*
         if (fullText.trim().length < 50) { //problem
@@ -350,9 +357,9 @@ async function processPage() {
             console.error("[DWD] API call failed:", error);
             dogWhistles = [];
         }
-        
+
         console.log("[DWD] API response:", dogWhistles);
-        
+
         if (!Array.isArray(dogWhistles) || !dogWhistles.length) {
             console.log("[DWD] No valid dog whistles found");
             chrome.runtime.sendMessage({
@@ -364,7 +371,7 @@ async function processPage() {
 
         // Remove existing highlights before processing
         removeHighlights();
-        
+
         // Process each text node in the document
         console.log(`[DWD] Processing ${dogWhistles.length} phrases...`);
         let highlightCount = 0;
@@ -372,7 +379,7 @@ async function processPage() {
             document.body,
             NodeFilter.SHOW_TEXT,
             {
-                acceptNode: function(node) {
+                acceptNode: function (node) {
                     // Skip if node is not visible
                     const style = window.getComputedStyle(node.parentElement);
                     if (style.display === 'none' || style.visibility === 'hidden') {
@@ -391,7 +398,7 @@ async function processPage() {
         while (node = walker.nextNode()) {
             nodes.push(node);
         }
-        for(const node of nodes){
+        for (const node of nodes) {
             for (const whistle of dogWhistles) {
                 if (whistle && typeof whistle === 'object' && whistle.phrase) {
                     if (highlightPhrase(node, whistle.phrase, whistle.severity || 1, whistle.reason || 'Potential dog whistle detected')) {
@@ -400,9 +407,9 @@ async function processPage() {
                 }
             }
         }
-        
+
         console.log(`[DWD] Added ${highlightCount} highlights to the page`);
-        
+
         // Update the popup with the count
         chrome.runtime.sendMessage({
             type: 'updateStatus',

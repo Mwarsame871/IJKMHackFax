@@ -174,8 +174,8 @@ titleText.style.marginLeft = '8px';
 const dogIcon = document.createElement('img');
 dogIcon.src = chrome.runtime.getURL('images/dogtalking.png');
 dogIcon.style.cssText = `
-    width: 20px;
-    height: 20px;
+    width: 35px;
+    height: 35px;
     object-fit: contain;
 `;
 

@@ -11,7 +11,7 @@ It highlights flagged phrases with colors based on severity and explains why the
 
 ## 🚀 Features
 
-- **AI-powered detection** using OpenAI’s GPT API
+- **AI-powered detection** using OpenAI's GPT API
 - **Color-coded highlights** (Yellow = mild, Orange = moderate, Red = severe)
 - **Tooltips** that explain why each phrase was flagged, including a custom dog icon
 - **Community Mode** (in progress): users can add their own dog whistles and explanations
@@ -44,52 +44,50 @@ It highlights flagged phrases with colors based on severity and explains why the
    ```bash
    git clone https://github.com/Mwarsame871/IJKMHackFax.git
 
+## Setup
 
+1. Clone this repository
+2. Copy `secrets.example.js` to `secrets.js`
+3. Replace `YOUR_API_KEY_HERE` in `secrets.js` with your OpenAI API key
+4. Load the extension in Chrome:
+   - Open Chrome and go to `chrome://extensions/`
+   - Enable "Developer mode"
+   - Click "Load unpacked"
+   - Select the extension directory
 
-How to Use Wissl Watch From Source Files (Dev Mode)
-Follow these steps to install and use the extension locally on Chrome:
+## API Key Setup
 
-🔧 Step 1: Clone or Download the Repo
-If you haven’t already, clone this repo:
+This extension requires an OpenAI API key to function. To set up your API key:
 
-bash
-Copy
-Edit
-git clone https://github.com/Mwarsame871/IJKMHackFax.git
-Or download the ZIP and extract it.
+1. Sign up for an OpenAI account at https://platform.openai.com/
+2. Generate an API key in your OpenAI dashboard
+3. Create `secrets.js` by copying `secrets.example.js`
+4. Replace `YOUR_API_KEY_HERE` with your actual OpenAI API key
 
-Step 2: Load the Extension in Chrome
-Open Chrome and go to:
-chrome://extensions/
+**Important**: Never commit your `secrets.js` file to version control. It is already added to `.gitignore` to prevent accidental commits.
 
-In the top right, enable Developer Mode
+## Features
 
-Click “Load unpacked”
+- Detects potentially racially coded language on web pages
+- Highlights detected phrases with different colors based on severity
+- Shows explanations in tooltips on hover
+- Toggle extension on/off via popup
+- Works on most websites including social media platforms
 
-Select the folder where this project (IJKMHackFax/) is located
+## Development
 
-You’ll now see Wissl Watch in your list of extensions!
+The extension uses:
+- Chrome Extension Manifest V3
+- OpenAI GPT API for detection
+- Custom parsing for different types of web content
 
-🔁 Step 3: Use the Extension
-Click the Wissl Watch icon in your extensions bar
+## Contributing
 
-Toggle the switch to enable dog whistle detection
+1. Fork the repository
+2. Create your feature branch
+3. Make your changes
+4. Submit a pull request
 
-Navigate to Reddit, Twitter/X, or an article-based site
+## Security Note
 
-The extension will scan the visible content and highlight any flagged dog whistles with:
-
-🟡 Yellow (mild)
-
-🟠 Orange (moderate)
-
-🔴 Red (severe)
-
-Hover over a highlighted word to see an explanation tooltip powered by AI
-
-⚠️ Note:
-This extension runs in real time, scanning as you scroll
-
-API calls are rate-limited to once every 15 seconds
-
-You must have an internet connection for AI detection to work
+Never share your API key or commit it to version control. The `secrets.js` file is ignored by git to prevent accidental exposure of API keys.

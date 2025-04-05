@@ -48,7 +48,7 @@ It highlights flagged phrases with colors based on severity and explains why the
 
 1. Clone this repository
 2. Copy `secrets.example.js` to `secrets.js`
-3. Replace `YOUR_API_KEY_HERE` in `secrets.js` with your OpenAI API key
+3. Replace `YOUR_API_KEY_HERE` in `secrets.js` with your OpenAI API key (Make sure to provide your own API key!!)
 4. Load the extension in Chrome:
    - Open Chrome and go to `chrome://extensions/`
    - Enable "Developer mode"
